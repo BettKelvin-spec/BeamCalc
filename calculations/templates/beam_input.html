@@ -1,92 +1,54 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon_io/apple-touch-icon.png' %}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon_io/favicon-32x32.png' %}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon_io/favicon-16x16.png' %}">
-    <link rel="manifest" href="{% static 'favicon_io/site.webmanifest' %}">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeamCalc - Input</title>
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'landing_page' %}">BeamCalc</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#features">Features</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'calculate' %}">Calculator</a>
-                    </li>
-                </ul>
-            </div>
+{% block title %}Beam Input{% endblock %}
+
+{% block content %}
+<div class="container">
+        <h2 class="text-center">Beam Calculation Input</h2>
+        <div class="form-container">
+            <form method="POST" action="{% url 'calculate' %}">
+                {% csrf_token %}
+
+                <!-- Beam Length -->
+                <div class="mb-3">
+                    <label for="length" class="form-label">Beam Length (m)</label>
+                    <input type="number" class="form-control" id="length" name="length" step="0.01" required>
+                </div>
+
+                <!-- Support Condition -->
+                <div class="mb-3">
+                    <label for="support_condition" class="form-label">Support Condition</label>
+                    <select class="form-select" id="support_condition" name="support_condition" required>
+                        <option value="" disabled selected>Select a condition</option>
+                        <option value="simply_supported">Simply Supported</option>
+                        <option value="fixed">Fixed</option>
+                        <option value="cantilever">Cantilever</option>
+                    </select>
+                </div>
+
+                <!-- Point Load -->
+                <div class="mb-3">
+                    <label for="point_load" class="form-label">Point Load (kN)</label>
+                    <input type="number" class="form-control" id="point_load" name="point_load" step="0.01">
+                </div>
+                <div class="mb-3">
+                    <label for="point_load_position" class="form-label">Position of Point Load (m)</label>
+                    <input type="number" class="form-control" id="point_load_position" name="point_load_position" step="0.01">
+                </div>
+
+                <!-- UDL -->
+                <div class="mb-3">
+                    <label for="udl" class="form-label">Uniformly Distributed Load (UDL) (kN/m)</label>
+                    <input type="number" class="form-control" id="udl" name="udl" step="0.01">
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Calculate</button>
+                </div>
+            </form>
         </div>
-    </nav>
-
-
-
-    <div class="container mt-5">
-        <h2 class="text-center">BeamCalc - Input Parameters</h2>
-        <form method="POST" action="{% url 'calculate' %}">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="length" class="form-label">Beam Length (m)</label>
-                <input type="number" step="0.1" min="0" class="form-control" id="length" name="length" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="load_type" class="form-label">Load Type</label>
-                <select class="form-select" id="load_type" name="load_type" required>
-                    <option value="point_load">Point Load</option>
-                    <option value="udl">Uniformly Distributed Load (UDL)</option>
-                </select>
-            </div>
-
-            <div id="point-load-fields" class="mb-3">
-                <label for="point_load" class="form-label">Point Load (kN)</label>
-                <input type="number" step="0.1" min="0" class="form-control" id="point_load" name="point_load">
-
-                <label for="point_load_position" class="form-label mt-3">Position of Point Load (m)</label>
-                <input type="number" step="0.1" min="0" class="form-control" id="point_load_position" name="point_load_position">
-            </div>
-
-            <div id="udl-fields" class="mb-3 d-none">
-                <label for="udl" class="form-label">UDL Magnitude (kN/m)</label>
-                <input type="number" step="0.1" min="0" class="form-control" id="udl" name="udl">
-            </div>
-
-            <button type="submit" class="btn btn-primary mt-3">Calculate</button>
-        </form>
     </div>
-
-    <script>
-        const loadType = document.getElementById('load_type');
-        const pointLoadFields = document.getElementById('point-load-fields');
-        const udlFields = document.getElementById('udl-fields');
-
-        loadType.addEventListener('change', () => {
-            if (loadType.value === 'point_load') {
-                pointLoadFields.classList.remove('d-none');
-                udlFields.classList.add('d-none');
-            } else if (loadType.value === 'udl') {
-                pointLoadFields.classList.add('d-none');
-                udlFields.classList.remove('d-none');
-            }
-        });
-    </script>
-</body>
-</html>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+{% endblock %}

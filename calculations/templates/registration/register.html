@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<!-- Center the content -->
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="form-container" style="max-width: 400px; width: 100%;">
+        <h2 class="text-center mb-4">Register</h2>
+
+        <!-- Registration Form -->
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
+        </form>
+
+        <p class="text-center mt-3">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+
+        <!-- Display messages if any -->
+        {% if messages %}
+            <ul class="alert alert-warning">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

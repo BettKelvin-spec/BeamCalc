@@ -1,19 +1,15 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeamCalc Results</title>
-</head>
-<body>
+{% block title %}BeamCalc Results{% endblock %}
+
+{% block content %}
     <h1>Beam Calculation Results</h1>
     <div>
         <h2>Shear Force Diagram (SFD) and Bending Moment Diagram (BMD)</h2>
-        <img src="data:image/png;base64,{{ diagram_image }}" alt="Diagrams">
+        <img src="{% static 'plots/beam_diagrams.png' %}" alt="Diagrams">
     </div>
     <a href="{% url 'download_pdf' %}" class="btn btn-primary">Download Report as PDF</a>
 
-</body>
-</html>
+{% endblock %}
+
